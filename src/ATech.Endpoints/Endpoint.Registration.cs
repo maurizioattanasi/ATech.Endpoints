@@ -12,6 +12,8 @@ public static class EndpointRegistration
     public static IServiceCollection AddEndpoints(this IServiceCollection services,
                                                   Assembly assembly)
     {
+        ArgumentNullException.ThrowIfNull(assembly);
+
         ServiceDescriptor[] serviceDescriptors = assembly
             .DefinedTypes
             .Where(type => type is { IsAbstract: false, IsInterface: false } && type.IsAssignableTo(typeof(IEndpoint)))
@@ -25,6 +27,8 @@ public static class EndpointRegistration
 
     public static IApplicationBuilder MapEndpoints(this WebApplication app, RouteGroupBuilder? routeGroupBuilder = null)
     {
+        ArgumentNullException.ThrowIfNull(app);
+        
         IEnumerable<IEndpoint> endpoints = app.Services
             .GetRequiredService<IEnumerable<IEndpoint>>();
 
