@@ -9,7 +9,7 @@
         <PackageReleaseNotes>Project setup</PackageReleaseNotes>
         <PackageProjectUrl>https://github.com/maurizioattanasi/ATech.Endpoints</PackageProjectUrl>
         <Copyright>Maurizio Attanasi</Copyright>
-        <NoWarn>CA1000,CA1862,CA1724,CA1052</NoWarn>
+        <NoWarn>CA1000,CA1303,CA1862,CA1724,CA1052</NoWarn>
 
         <!-- Configure code analysis. -->
         <AnalysisLevel>latest</AnalysisLevel>
@@ -18,4 +18,11 @@
         <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MinVer">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
 </Project>
