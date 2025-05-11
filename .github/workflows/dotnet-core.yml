@@ -17,14 +17,11 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 9.0.x
-    - name: Install dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
+    - name: Execute build script
+      run: ./build.sh
     - name: Pack ATech.Endpoints
       run: 
         dotnet pack ./src/ATech.Endpoints/ATech.Endpoints.csproj --output nuget-packages --configuration Release
     - name: Push with dotnet
       run: 
         dotnet nuget push "**/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
-
