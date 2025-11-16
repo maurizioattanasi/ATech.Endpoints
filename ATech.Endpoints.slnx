@@ -2,4 +2,5 @@
   <Folder Name="/src/">
     <Project Path="src/ATech.Endpoints/ATech.Endpoints.csproj" />
   </Folder>
+  <Project Path="targets/targets.csproj" />
 </Solution>
