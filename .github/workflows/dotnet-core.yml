@@ -6,12 +6,16 @@ on:
     tags: [ '*' ]
   pull_request:
     branches: [ master ]
-  
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+
+    environment: release
+    
+    permissions:
+      id-token: write # enable GitHub OIDC token issuance for this job
 
     steps:
     - uses: actions/checkout@v2
@@ -21,11 +25,21 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 10.0.x
-    - name: Execute build script
-      run: ./build.sh
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
     - name: Pack ATech.Endpoints
       run: 
         dotnet pack ./src/ATech.Endpoints/ATech.Endpoints.csproj --output nuget-packages --configuration Release
+
+      # Get a short-lived NuGet API key
+    - name: NuGet login (OIDC → temp API key)
+      uses: NuGet/login@v1
+      id: login
+      with:
+        user: ${{ secrets.NUGET_USER }} # Recommended: use a secret like ${{ secrets.NUGET_USER }} for your nuget.org username (profile name), NOT your email address
+  
     - name: Push with dotnet
       run: 
-        dotnet nuget push "**/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        dotnet nuget push "**/*.nupkg" --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
